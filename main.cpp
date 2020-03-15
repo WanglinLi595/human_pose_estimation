@@ -51,27 +51,28 @@ int main(int argc, char* argv[]) {
     try {
         std::cout << "InferenceEngine: " << GetInferenceEngineVersion() << std::endl;
 
-        // ------------------------------ Parsing and validation of input args ---------------------------------
+        // 解析参数
         if (!ParseAndCheckCommandLine(argc, argv)) {
             return EXIT_SUCCESS;
         }
 
         HumanPoseEstimator estimator(FLAGS_m, FLAGS_d, FLAGS_pc);
         cv::VideoCapture cap;
+		// 选择摄像头输入还是视频输入
         if (!(FLAGS_i == "cam" ? cap.open(0) : cap.open(FLAGS_i))) {
             throw std::logic_error("Cannot open input file or camera: " + FLAGS_i);
         }
 
         int delay = 33;
 
-        // read input (video) frame
+        // 读取帧
         cv::Mat curr_frame; cap >> curr_frame;
         cv::Mat next_frame;
         if (!cap.grab()) {
             throw std::logic_error("Failed to get frame from cv::VideoCapture");
         }
 
-        estimator.reshape(curr_frame);  // Do not measure network reshape, if it happened
+        estimator.reshape(curr_frame);  // 改变图片形状
 
         std::cout << "To close the application, press 'CTRL+C' here";
         if (!FLAGS_no_show) {
