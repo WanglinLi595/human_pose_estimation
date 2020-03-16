@@ -85,8 +85,8 @@ int main(int argc, char* argv[]) {
         Presenter presenter(FLAGS_u, static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT)) - graphSize.height - 10, graphSize);
         std::vector<HumanPose> poses;
         bool isLastFrame = false;
-        bool isAsyncMode = false; // execution is always started in SYNC mode
-        bool isModeChanged = false; // set to true when execution mode is changed (SYNC<->ASYNC)
+        bool isAsyncMode = false; // 开始为同步模式
+        bool isModeChanged = false; // 模式转变 (SYNC<->ASYNC)
         bool blackBackground = FLAGS_black;
 
         typedef std::chrono::duration<double, std::ratio<1, 1000>> ms;
@@ -217,12 +217,12 @@ int main(int argc, char* argv[]) {
             const int key = cv::waitKey(delay) & 255;
             if (key == 'p') {
                 delay = (delay == 0) ? 33 : 0;
-            } else if (27 == key) { // Esc
+            } else if (27 == key) { // 按 Esc，退出程序
                 break;
-            } else if (9 == key) { // Tab
+            } else if (9 == key) { // 按 Tab ，在同步模式和异步模式切换
                 isAsyncMode ^= true;
                 isModeChanged = true;
-            } else if (32 == key) { // Space
+            } else if (32 == key) { // 按 Space ，只显示处理图
                 blackBackground ^= true;
             }
             presenter.handleKey(key);
